@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Feliz Cumpleaños Nataly</title>
+<style>
+  body {
+    margin:0; padding:0;
+    background: radial-gradient(ellipse at bottom, #0b0c2a 0%, #03041a 100%);
+    overflow:hidden;
+    font-family:"Times New Roman", serif;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    min-height:100vh;
+    color:#fff;
+    touch-action: manipulation;
+  }
+
+  h1 {
+    font-size:2.8rem;
+    margin-bottom:20px;
+    text-align:center;
+    color:#ffd54a;
+    animation: bounce 1.5s infinite alternate, colorShift 4s infinite, scaleText 2s infinite alternate;
+    letter-spacing:2px;
+    z-index:10;
+  }
+
+  @keyframes bounce { from { transform: translateY(0); } to { transform: translateY(-20px); } }
+  @keyframes colorShift { 0% { color:#ffd54a; } 50% { color:#fff176; } 100% { color:#ffd54a; } }
+  @keyframes scaleText { 0% { transform: scale(1) translateY(0); } 50% { transform: scale(1.05) translateY(-5px); } 100% { transform: scale(1) translateY(0); } }
+
+  /* Estrellas */
+  .star { position:absolute; background:white; border-radius:50%; opacity:0.8; animation: twinkle 2s infinite alternate; }
+  @keyframes twinkle { 0% {opacity:0.2;} 50%{opacity:1;} 100%{opacity:0.2;} }
+
+  /* Corazones zigzag */
+  .heart { position:absolute; width:20px; height:20px; background:red; transform:rotate(-45deg); border-radius:50%; animation: floatHeart linear infinite; }
+  .heart::before, .heart::after { content:''; position:absolute; width:20px; height:20px; background:red; border-radius:50%; }
+  .heart::before { top:-10px; left:0; }
+  .heart::after { top:0; left:10px; }
+  @keyframes floatHeart { 0% { transform: translate(0,0) rotate(-45deg); opacity:0.7; } 50% { transform: translate(30px,-200px) rotate(-45deg); opacity:0.8; } 100% { transform: translate(-20px,-400px) rotate(-45deg); opacity:0; } }
+
+  /* Montañita verde */
+  .mountain { position:absolute; bottom:0; width:100%; height:150px; background: linear-gradient(to top, #2e7d32, #4caf50); border-radius:50% 50% 0 0; z-index:1; }
+
+  .garden { display:flex; justify-content:center; align-items:flex-end; gap:8px; position:relative; z-index:5; margin-bottom:20px; }
+
+  .tulip { position:relative; width:40px; height:0; animation: growTulip 2s forwards; transform-origin:bottom; }
+  @keyframes growTulip { from{height:0;} to{height:120px;} }
+
+  .stem { width:5px; background:#2c6b3a; position:absolute; bottom:0; left:50%; transform:translateX(-50%); height:100%; }
+  .petal { width:18px; height:18px; border-radius:50%; position:absolute; top:-20px; background:#ffd54a; }
+  .petal1 { left:0; } .petal2 { right:0; } .petal3 { left:50%; transform:translateX(-50%); top:-32px; }
+  .center { width:12px; height:12px; background:orange; border-radius:50%; position:absolute; top:-28px; left:50%; transform:translateX(-50%); box-shadow:0 0 10px rgba(255,165,0,0.7); }
+
+  /* Carta estilo antigua */
+  .letter { position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); background:#f3e1c2; padding:25px; border-radius:10px; box-shadow:0 0 20px rgba(0,0,0,0.6); color:#5b3a29; max-width:90%; font-size:1.2rem; line-height:1.5rem; z-index:20; opacity:0; transition:opacity 0.7s ease; border:3px solid #d4b68a; font-family:"Georgia", serif; }
+  .letter.show { opacity:1; }
+
+  @media (max-width:600px){
+    h1{font-size:1.8rem;}
+    .tulip{width:30px;}
+    .petal{width:14px;height:14px;}
+    .center{width:10px;height:10px;top:-20px;}
+    .garden{gap:4px;}
+    .letter{font-size:1rem;padding:15px;}
+  }
+</style>
+</head>
+<body>
+
+<h1>¡Feliz Cumpleaños Nataly!</h1>
+<div class="garden" id="garden"></div>
+<div class="mountain"></div>
+<div class="letter" id="letter">
+  <p>Mi querida Nataly,</p>
+  <p>Hoy celebro tu vida y cada momento que compartimos. No tengo oro ni regalos caros, pero te doy mi corazón entero. Cada día a tu lado es como un tulipán floreciendo bajo la luz de estrellas, y mi amor por ti crece sin medida. Eres mi alegría, mi inspiración y mi refugio. Que este año esté lleno de magia, risas y sueños cumplidos.</p>
+  <p>Feliz cumpleaños, mi amor. 💛</p>
+</div>
+
+<script>
+  // Estrellas
+  for(let i=0;i<80;i++){
+    const star=document.createElement('div');
+    star.classList.add('star');
+    const size=Math.random()*3+1+'px';
+    star.style.width=size; star.style.height=size;
+    star.style.top=Math.random()*window.innerHeight+'px';
+    star.style.left=Math.random()*window.innerWidth+'px';
+    star.style.animationDuration=(Math.random()*2+1)+'s';
+    document.body.appendChild(star);
+  }
+
+  // Corazones zigzag
+  function createHeart(){
+    const heart=document.createElement('div');
+    heart.classList.add('heart');
+    heart.style.left=Math.random()*window.innerWidth+'px';
+    heart.style.animationDuration=(Math.random()*3+3)+'s';
+    document.body.appendChild(heart);
+    setTimeout(()=>heart.remove(),4000);
+  }
+  setInterval(createHeart,400);
+
+  // Tulipanes sobre montañita
+  const garden=document.getElementById('garden');
+  function createTulip(delay){
+    const tulip=document.createElement('div'); tulip.classList.add('tulip');
+    tulip.style.animationDelay=delay+'s';
+    const stem=document.createElement('div'); stem.classList.add('stem');
+    const petal1=document.createElement('div'); petal1.classList.add('petal','petal1');
+    const petal2=document.createElement('div'); petal2.classList.add('petal','petal2');
+    const petal3=document.createElement('div'); petal3.classList.add('petal','petal3');
+    const center=document.createElement('div'); center.classList.add('center');
+    tulip.append(stem,petal1,petal2,petal3,center);
+    garden.appendChild(tulip);
+  }
+  [0,0.5,1,1.5,2,2.5,3,3.5].forEach(delay=>createTulip(delay));
+
+  // Carta al tocar (ya visible)
+  const letter=document.getElementById('letter');
+  document.body.addEventListener('touchstart',()=>{ letter.classList.add('show'); });
+  document.body.addEventListener('click',()=>{ letter.classList.add('show'); });
+</script>
+</body>
+</html>
